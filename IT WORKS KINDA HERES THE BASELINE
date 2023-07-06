@@ -1,6 +1,9 @@
 import random
+import character_sheets.py
+
 
 def import_class(class_list):
+    '''imports classes from char_stats.txt'''
     line_list = []
     list_type = ["class_name", "atk",
                  "dfns", "dod", "hp",
@@ -20,35 +23,32 @@ def import_class(class_list):
         class_list.insert(-1, dict_char)
 
 
-def return_name(char):
-    return char['name']
+def import_monsters(monster_list):
+    '''imports classes from char_stats.txt'''
+    line_list = []
 
+    list_type = ["monster_name", "atk",
+                 "dfns", "dod", "hp",
+                 "intel", "fth", "stgh", "dex", "diff", "xp"
+                ]
 
-def return_char_class(char):
-    return char['character_class']['class_name']
+    with open("monster_stats.txt", 'r') as f:
+        for line in f:
+            line = line.replace("\n", "")
+            line = line.replace(",", " ")
+            line = line.split()
+            for item in line:
+                if item.isdigit() == True or item.isdecimal() == True:
+                    line[line.index(item)] = float(item)
+            line_list.append(line)
 
-
-def return_desc(char):
-    return char['desc']
-
-
-def return_age(char):
-    return char['age']
-
-
-def return_gender(char):
-    return char['gender']
-
-
-def return_start_item(char):
-    return char['start_item']
-
-
-def return_ability(char):
-    return char['ability']
+    for characters in line_list:
+        dict_char = dict(zip(list_type, characters))
+        monster_list.insert(-1, dict_char)
 
 
 def return_char(name, char_list):
+    '''loops through char list to find appropriate char dict'''
     for x in char_list:
         if x['name'] == name.lower():
             return x
@@ -56,17 +56,8 @@ def return_char(name, char_list):
         raise ValueError('Char doesn\'t exist!')
 
 
-def print_character(char):
-    print(f'Name: {return_name(char).title()}')
-    print(f'Class: {return_char_class(char).title()}')
-    print(f'Description: {return_desc(char).title()}')
-    print(f'Age: {return_age(char).title()}')
-    print(f'Gender: {return_gender(char).title()}')
-    print(f'Starter item: {return_start_item(char).title()}')
-    print(f'Ability: {return_ability(char).title()}')
-
-
 def pick_characters(classes, party):
+    '''picks party at start'''
     while len(classes) > 4:
         classes.remove(random.choice(classes))
     
@@ -80,20 +71,30 @@ def pick_characters(classes, party):
                     party.append(char)
                     print(f'{select.title()} has been added to the party!')
     
-    print(f'Your party is {party}')
+    print(f'Your party is {party[0]["name"].title()},'
+          f'{party[1]["name"].title()}, {party[2]["name"].title()},'
+          f'and {party[3]["name"].title()}'
+         )
 
 
 def lose_health(party, character):
+    '''decrements hp value for party member'''
     for char in party:
         if char['name'] == character.lower():
             char['character_class']['hp'] -= 2 # dmg would be some small float
-    
+
 
 def main():
     class_list = []
+    monster_list = []
     party = []
 
+    upper = 100
+    lower = 0
+    
     import_class(class_list)
+    import_monsters(monster_list)
+    print(monster_list)
 
     mage_stats = class_list[0]
     cleric_stats = class_list[1]
@@ -103,70 +104,6 @@ def main():
     barb_stats = class_list[5]
     cowboy_stats = class_list[6]
     paladin_stats = class_list[7]
-    
-    character_1 = {'name': 'rock-umm', 
-                   'character_class': paladin_stats, 
-                   'desc': '2 feet tall, buff', 
-                   'age': '40', 
-                   'gender': 'male', 
-                   'start_item': 'rock', 
-                   'ability': ''}
-
-    character_2 = {'name': 'glassina cannonina',
-                   'character_class': mage_stats,
-                   'desc': 'incredibly dense',
-                   'age': '99',
-                   'gender': 'female',
-                   'start_item': 'cane staff',
-                   'ability': ''}
-
-    character_3 = {'name': 'ned flanders',
-                   'character_class': cleric_stats,
-                   'desc': 'friendly neighbor',
-                   'age': '45',
-                   'gender': 'male',
-                   'start_item': 'bible',
-                   'ability': ''}
-
-    character_4 = {'name': 'billy',
-                   'character_class': monk_stats,
-                   'desc': 'vanilla ice haircut',
-                   'age': '27, thinks he is 19',
-                   'gender': 'male',
-                   'start_item': 'skateboard',
-                   'ability': ''}
-
-    character_5 = {'name': 'baldwin',
-                   'character_class': rogue_stats,
-                   'desc': 'steals',
-                   'age': '7',
-                   'gender': 'female',
-                   'start_item': 'your wallet',
-                   'ability': ''}
-
-    character_6 = {'name': 'steve',
-                   'character_class': builder_stats,
-                   'desc': 'geometric, hella based',
-                   'age': '12',
-                   'gender': 'male',
-                   'start_item': 'bare hands',
-                   'ability': ''}
-
-    character_7 = {'name': 'barbie',
-                   'character_class': barb_stats,
-                   'desc': 'thiccc and 210 cm tall',
-                   'age': '77',
-                   'gender': 'male',
-                   'start_item': 'doll with matching dress',
-                   'ability': ''}
-
-    character_8 = {'name': 'herbert bernard',
-                   'character_class': cowboy_stats,
-                   'desc': 'canadian',
-                   'age': 'REDACTED',
-                   'gender': 'REDACTED',
-                   'start_item': 'colt 1845',
-                   'ability': ''}
    
     char_list = [character_1, character_2, character_3,
                  character_4, character_5, character_6,
@@ -183,8 +120,21 @@ def main():
 
     pick_characters(class_list, party)
     
-    while True:
+    for x in party:
+        x.update({'level': 1})
+        x.update({upper: lower})
         
+    print('Welcome, heroes! Prepare to die?')
+    
+#     while True:
+#         spawn_encounter()
+        
+#         battle()
+        
+#         enemy_drops()
+        
+#         handle_party_lvl()
+
 
 if __name__ == '__main__':
     main()
