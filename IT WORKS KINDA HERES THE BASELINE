@@ -135,7 +135,7 @@ def return_ability(char):
             
 def print_character(char):
     print(f'Name: {return_name(char).title()}')
-    #print(f'Class: {return_char_class(char)}')
+    print(f'Class: {return_char_class(char)}')
     print(f'Description: {return_desc(char).title()}')
     print(f'Age: {return_age(char).title()}')
     print(f'Gender: {return_gender(char).title()}')
@@ -146,7 +146,7 @@ def print_character(char):
 for x in class_list:
     x.update({'characters': []})
     for y in char_list:
-        if return_char_class(y) == x:
+        if return_char_class(y) == x['class_name']:
             x['characters'].append(y)
 
 
@@ -157,8 +157,9 @@ def pick_characters(classes, party):
     while len(party) < 4:
         for dictionary in classes:
             print(f'first class is {dictionary["class_name"]}')
+            print(dictionary)
             for char in dictionary["characters"]:
-                print(f'{print_character(char)}')
+                print_character(char)
                 select = input('type character name to add character to party')
                 if select.lower() == return_name(char):
                     party.append(char)
