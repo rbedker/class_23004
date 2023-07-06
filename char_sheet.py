@@ -15,14 +15,14 @@ with open("char_stats.txt", 'r') as f:
 
 for characters in line_list:
     dict_char = dict(zip(list_type, characters))
-    dict_list.insert(-1, dict_char)
+    char_dict.insert(-1, dict_char)
 
 
-mage_stats = dict_list[0] 
-cleric_stats = dict_list[1]
-monk_stats = dict_list[2]
-rogue_stats = dict_list[3]
-builder_stats = dict_list[4]
-barb_stats = dict_list[5]
-cowboy_stats = dict_list[6]
-paladin_stats = dict_list[7]
+mage_stats = char_dict[0]
+cleric_stats = char_dict[1]
+monk_stats = char_dict[2]
+rogue_stats = char_dict[3]
+builder_stats = char_dict[4]
+barb_stats = char_dict[5]
+cowboy_stats = char_dict[6]
+paladin_stats = char_dict[7]
