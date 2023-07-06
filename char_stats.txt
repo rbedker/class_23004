@@ -1,0 +1,8 @@
+Paladin 5 8 1 8 3 7 7 1
+Mage 9 1 4 5 9 1 7 4
+Cleric 5 5 5 4 5 10 1 5
+Monk 8 2 7 7 3 2 3 8
+Rogue 6 2 9 4 5 1 5 8
+Builder 9 5 1 5 9 1 9 1
+Barb 9 3 4 7 1 5 6 5
+Cowboy_Alien 8 3 5 4 8 1 3 8
