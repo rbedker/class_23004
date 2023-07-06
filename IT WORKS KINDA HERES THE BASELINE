@@ -23,6 +23,20 @@ def import_class(class_list):
         class_list.insert(-1, dict_char)
 
 
+def exp_gain(exp_amt):
+    '''adds exp given an exp amount'''
+    lower += exp_amt
+    exp_dictionary[upper] = lower
+    for exp_dictionary in party:
+        if exp_dictionary.get(upper) >= upper:
+            while exp_dictionary.get(upper) >= upper:
+                level += 1
+                lower -= upper
+                exp_dictionary['level'] = level
+                exp_dictionary.pop(upper)
+                upper += round((upper * 0.7))
+                exp_dictionary.update({upper:lower})
+
 def import_monsters(monster_list):
     '''imports classes from char_stats.txt'''
     line_list = []
