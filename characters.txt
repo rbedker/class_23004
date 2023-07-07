@@ -1,0 +1,8 @@
+rock-umm,2 feet tall (buff),40,male,rock,??,Paladin
+glassina cannonina,,99,female,cane staff,??,Mage
+ned flanders,friendly neighbor,45,male,bible,??,Cleric
+billy,vanilla ice haircut,27(thinks he is 19),male,skateboard,??,Monk
+baldwin,steals,7,female,your wallet,??,Rogue
+steve,geometric (hella based),12,male,bare hands,??,Builder
+barbie,thiccc and 210 cm tall,77,male,doll with matching dress,??,Barb
+herbert bernard,canadian,redacted,redacted,colt 1845,??,Cowboy_Alien
