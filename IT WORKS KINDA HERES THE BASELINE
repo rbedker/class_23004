@@ -149,7 +149,7 @@ def print_char(char):
     print(f"Starter item: {char['start_item'].title()}")
     print(f"Ability: {char['ability'].title()}")
 
-def encounter():
+def encounter(party, monster_list):
     """ This function generates a list of monsters for the characters to fight """
     poss_encounter = []
     encounter_list = []
