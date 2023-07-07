@@ -85,21 +85,22 @@ def return_char(name, party):
             return x
     else:
         raise ValueError('Char doesn\'t exist!')
-
+        
+        
 def return_char_stats(name, char_list):
     '''loops through char list to find appropriate char dict and find stats of dict'''
     for x in char_list:
         if x['name'] == name.lower():
             return x['class_stats']
 
+        
 def return_char_stat_perc(name, char_list):
     '''loops through char list to find appropriate char dict and find stats perc of dict'''
     for x in char_list:
         if x['name'] == name.lower():
             return x['stat_perc']
-    
 
-
+        
 def pick_characters(classes, party):
     '''picks party at start'''
     while len(classes) > 4:
@@ -107,13 +108,19 @@ def pick_characters(classes, party):
     
     while len(party) < 4:
         for dictionary in classes:
-            print(f'first class is {dictionary["class_name"]}')
+            print(f'Class is {dictionary["class_name"]}\n')
             for char in dictionary["characters"]:
-                print_char(char)
-                select = input('type character name to add character to party')
-                if select.lower() == char['name']:
-                    party.append(char)
-                    print(f'{select.title()} has been added to the party!')
+                while True:
+                    print_char(char)
+                    select = input('Type character name to add character to party: ')
+                    if select.lower() == char['name']:
+                        party.append(char)
+                        print(f'{select.title()} has been added to the party!\n')
+                        break
+                    else:
+                        print('Not a valid character name!')
+                        continue
+                    
     
     
     # for x in party:
