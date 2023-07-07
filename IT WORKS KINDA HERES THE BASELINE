@@ -143,6 +143,26 @@ def import_items(item_list):
         dict_char = dict(zip(list_type, item))
         item_list.insert(-1, dict_char)
 
+def import_boss_items():
+    '''imports items from boss_items.txt'''
+    line_list = []
+    list_type = ["item_name", "atk",
+                 "dfns", "dod", "hp",
+                 "intel", "fth", "stgh", "dex"]
+    boss_item = []
+    with open("boss_items.txt", 'r') as f:
+        for line in f:
+            line = line.replace("\n", "")
+            line = line.split()
+            for item in line:
+                if item.isdigit() == True:
+                    line[line.index(item)] = int(item)
+            line_list.append(line)
+
+    for item in line_list:
+        dict_char = dict(zip(list_type, item))
+        boss_item.insert(-1, dict_char)
+    return(boss_item)
 
 def return_char(name, party):
     '''loops through party to find appropriate char dict'''
