@@ -97,6 +97,30 @@ def import_monsters(monster_list):
         dict_char = dict(zip(list_type, characters))
         monster_list.insert(-1, dict_char)
 
+def import_boss():
+    '''imports boss from boss_stats.txt'''
+    line_list = []
+
+    list_type = ["boss_name", "atk",
+                 "dfns", "dod", "hp",
+                 "intel", "fth", "stgh", "dex", "diff", "xp"
+                ]
+    boss_list = []
+
+    with open("boss_stats.txt", 'r') as f:
+        for line in f:
+            line = line.replace("\n", "")
+            line = line.replace(",", " ")
+            line = line.split()
+            for item in line:
+                if item.isdigit() == True or item.isdecimal() == True:
+                    line[line.index(item)] = float(item)
+            line_list.append(line)
+
+    for boss in line_list:
+        dict_char = dict(zip(list_type, boss))
+        boss_list.insert(-1, dict_char)
+    return(boss_list)
 
 def import_items(item_list):
     '''imports items from items.txt'''
