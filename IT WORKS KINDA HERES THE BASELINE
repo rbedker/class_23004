@@ -149,6 +149,35 @@ def print_char(char):
     print(f"Starter item: {char['start_item'].title()}")
     print(f"Ability: {char['ability'].title()}")
 
+def encounter():
+    """ This function generates a list of monsters for the characters to fight """
+    poss_encounter = []
+    encounter_list = []
+    level = 0
+    encounter_diff = 0
+    for x in range(0,len(party)):
+        lvl = party[x].get('level')
+        level += lvl/4
+    
+    for monster in range(0,len(monster_list)):
+        monsters = monster_list[monster]
+        monster_diff = float(monster_list[monster].get('diff'))
+        
+        if monster_diff < level:
+            poss_encounter.append(monsters)
+    
+    print(level)
+    
+    while True:
+        for monsters in poss_encounter:
+            r.shuffle(poss_encounter)
+            diff = float(monsters.get('diff'))
+            if encounter_diff < level:
+                    encounter_diff += diff
+                    encounter_list.append(monsters)
+        break
+        
+
     
 def main():
     class_list = []
