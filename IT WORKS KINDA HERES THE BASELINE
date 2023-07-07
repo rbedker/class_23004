@@ -25,6 +25,9 @@ def import_class(class_list):
 
 def import_chars(char_list, class_list):
     line_list = []
+    list3 = []
+    list1 = ["atk","dfns", "dod", "hp",
+            "intel", "fth", "stgh", "dex"]
     list_type = ['name', 'desc',
                  'age', 'gender',
                  'start_item', 'ability', 'class'
@@ -46,6 +49,18 @@ def import_chars(char_list, class_list):
 
     for char in char_list:
         del char['class']
+
+    with open('stat_perc.txt', 'r') as sp:
+            for line in sp:
+                line = line.split()
+                for item in line:
+                    if item.isdecimal() != True:
+                        line[line.index(item)] = float(item)
+                list3.append(line)
+                
+    for char in list3:
+        dict_stat_perc = dict(zip(list1, char))
+        char_list.insert(-1, dict_stat_perc)
 
     for x in class_list:
         x.update({'characters': []})
@@ -142,6 +157,10 @@ def pick_characters(classes, party):
     while len(classes) > 4:
         classes.remove(random.choice(classes))
 
+    upper = 100
+    lower = 0
+    level = 1
+
     while len(party) < 4:
         for dictionary in classes:
             print(f'Class is {dictionary["class_name"]}\n')
@@ -157,9 +176,9 @@ def pick_characters(classes, party):
                         print('Not a valid character name!')
                         continue
 
-    # for x in party:
-    #     x.update({'level': 1})
-    #     x.update({upper: lower})
+    for x in party:
+        x.update({'level': 1})
+        x.update({upper: lower})
     
     print(f'Your party is {party[0]["name"].title()}, '
           f'{party[1]["name"].title()}, {party[2]["name"].title()}, '
