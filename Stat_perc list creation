@@ -1,0 +1,8 @@
+list3 = []
+ with open('stat_perc.txt', 'r') as sp:
+        for line in sp:
+            line = line.split()
+            for item in line:
+                if item.isdecimal() != True:
+                    line[line.index(item)] = float(item)
+            list3.append(line)
