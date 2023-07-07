@@ -256,9 +256,9 @@ def main():
         encounter = gen_encounter_list(party, monster_list)
 
         drop_list = drop_items(encounter, item_list)
-        
+
         for monster in encounter:
-            print(f'You encounter {monster}\n')
+            print(f'You encounter {monster["monster_name"]}\n')
         
         for member in party:
             print(f'Current party member is {member["name"].title()}')
@@ -270,15 +270,25 @@ def main():
                              )
 
             if selection.lower() not in ['1', '2', '3', 'q']:
-                print('Enter a valid choice')
+                print('Enter a valid choice\n')
                 continue
             
             if selection == '1':
                 for i, monster in enumerate(encounter):
-                    print(f'Enter {i + 1} to attack {monster}\n')
+                    print(f'Enter {i + 1} to attack {monster["monster_name"]}\n')
                 
+                attack_choice = int(input(': ')) - 1
+
+                print(f'{member["name"].title()} attacks {encounter[attack_choice]["monster_name"].title()}\n')
+                print(f'{encounter[attack_choice]["monster_name"].title()} loses {member["character_class"]["atk"]} health\n'
+                      f'{encounter[attack_choice]["monster_name"]}\'s health is now {encounter[attack_choice]["hp"]}\n'
+                     )
                 
-                print(f'{member["name"].title()} attacks')
+                encounter[attack_choice]['hp'] -= member['character_class']['atk']
+                
+                if encounter[attack_choice]['hp'] <= 0:
+                    encounter.pop(attack_choice)
+                    print(f'{encounter[attack_choice]["monster_name"]} died')
 
         break
     
