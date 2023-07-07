@@ -280,15 +280,15 @@ def main():
                 attack_choice = int(input(': ')) - 1
 
                 print(f'{member["name"].title()} attacks {encounter[attack_choice]["monster_name"].title()}\n')
-                print(f'{encounter[attack_choice]["monster_name"].title()} loses {member["character_class"]["atk"]} health\n'
-                      f'{encounter[attack_choice]["monster_name"]}\'s health is now {encounter[attack_choice]["hp"]}\n'
-                     )
-                
+                print(f'{encounter[attack_choice]["monster_name"].title()} loses {member["character_class"]["atk"]} health\n')
+
                 encounter[attack_choice]['hp'] -= member['character_class']['atk']
                 
                 if encounter[attack_choice]['hp'] <= 0:
-                    encounter.pop(attack_choice)
                     print(f'{encounter[attack_choice]["monster_name"]} died')
+                    encounter.pop(attack_choice)
+                else:
+                    print(f'{encounter[attack_choice]["monster_name"]}\'s health is now {encounter[attack_choice]["hp"]}\n')
 
         break
     
