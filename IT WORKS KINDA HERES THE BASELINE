@@ -25,9 +25,6 @@ def import_class(class_list):
 
 def import_chars(char_list, class_list):
     line_list = []
-    list3 = []
-    list1 = ["atk","dfns", "dod", "hp",
-            "intel", "fth", "stgh", "dex"]
     list_type = ['name', 'desc',
                  'age', 'gender',
                  'start_item', 'ability', 'class'
@@ -41,14 +38,17 @@ def import_chars(char_list, class_list):
     for char in line_list:
         dict_char = dict(zip(list_type, char))
         char_list.insert(-1, dict_char)
-
+        
     for char in char_list:
         for c in class_list:
             if char['class'] == c['class_name']:
                 char.update({'character_class': c})
-
-    for char in char_list:
-        del char['class']
+                
+    list1 = ["atk","dfns", "dod", "hp",
+            "intel", "fth", "stgh", "dex"]
+    list3 = []
+    
+    h = 0
 
     with open('stat_perc.txt', 'r') as sp:
             for line in sp:
@@ -60,14 +60,17 @@ def import_chars(char_list, class_list):
                 
     for char in list3:
         dict_stat_perc = dict(zip(list1, char))
-        char_list.insert(-1, dict_stat_perc)
+        class_list[h].update({'stat_perc': dict_stat_perc})
+        h += 1
+                
+    for char in char_list:
+        del char['class']
 
     for x in class_list:
         x.update({'characters': []})
         for y in char_list:
             if y['character_class']['class_name'] == x['class_name']:
                 x['characters'].append(y)
-
 
 def import_monsters(monster_list):
     '''imports classes from char_stats.txt'''
@@ -117,13 +120,13 @@ def import_items(item_list):
         item_list.insert(-1, dict_char)
 
 
-# def return_char(name, party):
-#     '''loops through party to find appropriate char dict'''
-#     for x in party:
-#         if x['name'] == name.lower():
-#             return x
-#     else:
-#         raise ValueError('Char doesn\'t exist!')
+def return_char(name, party):
+    '''loops through party to find appropriate char dict'''
+    for x in party:
+        if x['name'] == name.lower():
+            return x
+    else:
+        raise ValueError('Char doesn\'t exist!')
 
 
 def drop_items(encounter, item_list):
@@ -131,8 +134,8 @@ def drop_items(encounter, item_list):
     drops = []
     DROP_RATE = 100
     for monster in encounter:
-        prob = monster['diff'] * DROP_RATE
-        if prob in range(random.randint(0, 499), 500):
+        prob = range(0, int(monster['diff'] * DROP_RATE))
+        if random.randint(0, 500) in prob:
             drops.append(random.choice(item_list))
     
     return drops
@@ -157,10 +160,6 @@ def pick_characters(classes, party):
     while len(classes) > 4:
         classes.remove(random.choice(classes))
 
-    upper = 100
-    lower = 0
-    level = 1
-
     while len(party) < 4:
         for dictionary in classes:
             print(f'Class is {dictionary["class_name"]}\n')
@@ -175,9 +174,11 @@ def pick_characters(classes, party):
                     else:
                         print('Not a valid character name!')
                         continue
-
+    upper = 100
+    lower = 0
+    level = 1
     for x in party:
-        x.update({'level': 1})
+        x.update({'level': level})
         x.update({upper: lower})
     
     print(f'Your party is {party[0]["name"].title()}, '
@@ -218,15 +219,17 @@ def gen_encounter_list(party, monster_list):
         monsters = monster_list[monster]
         monster_diff = monster_list[monster].get('diff')
         
-        if monster_diff < level:
+        if monster_diff <= level:
             poss_encounter.append(monsters)
-    
-    for monsters in poss_encounter:
-        r.shuffle(poss_encounter)
-        diff = monsters.get('diff')
-        if encounter_diff < level:
-                encounter_diff += diff
-                encounter_list.append(monsters)
+    while encounter_diff < level:
+        for monsters in poss_encounter:
+            random.shuffle(poss_encounter)
+            diff = monsters.get('diff')
+            if encounter_diff < level and encounter_diff + diff < level * 1.5:
+                    encounter_diff += diff
+                    encounter_list.append(monsters)
+            else:
+                continue
 
     return encounter_list
 
@@ -237,15 +240,12 @@ def main():
     monster_list = []
     item_list = []
     party = []
-    upper = 100
-    lower = 0
 
     import_class(class_list)
     import_monsters(monster_list)
-    print(monster_list)
     import_chars(char_list, class_list)
     import_items(item_list)
-        
+    print(char_list)
     char_1, char_2, char_3, char_4 = pick_characters(class_list, party)
 
     print('Welcome, heroes! Prepare to die?')
@@ -255,10 +255,32 @@ def main():
 
         encounter = gen_encounter_list(party, monster_list)
 
-        drop_list = drop_items(encounter)
+        drop_list = drop_items(encounter, item_list)
         
+        for monster in encounter:
+            print(f'You encounter {monster}\n')
+        
+        for member in party:
+            print(f'Current party member is {member["name"].title()}')
+
+            selection = input('Enter 1 to attack\n'
+                              'Enter 2 to defend\n'
+                              'Enter 3 to use an item\n'
+                              'Enter q to quit the game: '
+                             )
+
+            if selection.lower() not in ['1', '2', '3', 'q']:
+                print('Enter a valid choice')
+                continue
+            
+            if selection == '1':
+                for i, monster in enumerate(encounter):
+                    print(f'Enter {i + 1} to attack {monster}\n')
+                
+                
+                print(f'{member["name"].title()} attacks')
+
         break
-        
-        
+    
 if __name__ == '__main__':
     main()
