@@ -1,0 +1,5 @@
+RodOfPower 4 0 0 0 0 0 0 0
+JuiceOfPower 0 0 0 4 10 0 0 0
+CookieOfPower 1 1 0 3 0 0 2 0 
+ArmorOfPower 0 -2 7 3 0 0 0 -1
+WordOfDog 0 0 0 3 0 20 0 -1
