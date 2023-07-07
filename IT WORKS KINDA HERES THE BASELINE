@@ -165,7 +165,6 @@ def generating_encounter_list(party, monster_list):
         
         if monster_diff < level:
             poss_encounter.append(monsters)
-    return(encounter_list)
     
     while True:
         for monsters in poss_encounter:
@@ -175,7 +174,7 @@ def generating_encounter_list(party, monster_list):
                     encounter_diff += diff
                     encounter_list.append(monsters)
         break
-        
+    return(encounter_list)
 
     
 def main():
