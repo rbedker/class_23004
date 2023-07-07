@@ -149,7 +149,7 @@ def print_char(char):
     print(f"Starter item: {char['start_item'].title()}")
     print(f"Ability: {char['ability'].title()}")
 
-def encounter(party, monster_list):
+def generating_encounter_list(party, monster_list):
     """ This function generates a list of monsters for the characters to fight """
     poss_encounter = []
     encounter_list = []
@@ -165,8 +165,7 @@ def encounter(party, monster_list):
         
         if monster_diff < level:
             poss_encounter.append(monsters)
-    
-    print(level)
+    return(encounter_list)
     
     while True:
         for monsters in poss_encounter:
