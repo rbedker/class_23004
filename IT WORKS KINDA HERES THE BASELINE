@@ -259,9 +259,8 @@ def gen_encounter_list(party, monster_list):
         level += char.get('level') / 4
     
     for monster in monster_list:
-        monster_diff = monster.get('diff')
         
-        if monster_diff <= level:
+        if monster.get('diff') <= level:
             poss_encounter.append(monster)
 
     while encounter_diff < level:
@@ -277,6 +276,7 @@ def gen_encounter_list(party, monster_list):
                 continue
 
     return encounter_list
+
 
 def end_of_game_stats(party, downed_monsters):
     """This function creates/appends to a file named 'end_of_game_stats.txt, printing out the party's character names and number of monsters defeated"""
