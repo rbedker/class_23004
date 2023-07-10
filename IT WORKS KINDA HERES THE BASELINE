@@ -1,4 +1,4 @@
-import random
+import random as r
 
 
 def import_class(class_list):
@@ -179,8 +179,8 @@ def drop_items(encounter, item_list):
     DROP_RATE = 100
     for monster in encounter:
         prob = range(0, int(monster['diff'] * DROP_RATE))
-        if random.randint(0, 500) in prob:
-            drops.append(random.choice(item_list))
+        if r.randint(0, 500) in prob:
+            drops.append(r.choice(item_list))
     
     return drops
 
@@ -202,7 +202,7 @@ def return_char_stat_perc(name, char_list):
 def pick_characters(classes, party):
     '''picks party at start'''
     while len(classes) > 4:
-        classes.remove(random.choice(classes))
+        classes.remove(r.choice(classes))
 
     while len(party) < 4:
         for dictionary in classes:
@@ -266,7 +266,7 @@ def gen_encounter_list(party, monster_list):
 
     while encounter_diff < level:
         for monsters in poss_encounter:
-            random.shuffle(poss_encounter)
+            r.shuffle(poss_encounter)
             diff = monsters.get('diff')
 
             if encounter_diff < level and encounter_diff + diff < level * 1.5:
