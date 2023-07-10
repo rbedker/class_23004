@@ -1,0 +1,43 @@
+import random 
+
+char_list2 = [{'name': 'glassina cannonina', 'desc': '', 'age': '99', 'gender': 'female', 'start_item': 'cane staff', 'ability': '??', 'character_class': {'class_nameage', 'atk': 9, 'dfns': 1, 'dod': 4, 'hp': 5, 'intel': 9, 'fth': 1, 'stgh': 7, 'dex': 4, 'characters': [{...}]}, 'stat_perc': {'atk': 50, 'dfns': 80, 'dod': 10, 'hp': 80, 'intel': 30, 'fth': 70, 'stgh': 70, 'dex': 10}}, {'name': 'ned flanders', 'desc': 'friendly neighbor', 'age': '45', 'gender': 'male', 'start_item': 'bible', 'ability': '??', 'character_class': {'class_name': 'Cleric', 'atk': 5, 'dfns': 5, 'dod': 5, 'hp': 4, 'intel': 5, 'fth': 10, 'stgh': 1, 'dex': 5, 'characters': [{...}]}, 'stat_perc': {'atk': 90, 'dfns': 10, 'dod': 40, 'hp': 50, 'intel': 90, 'fth': 10, 'stgh': 70, 'dex': 40}}, {'name': 'billy', 'desc': 'vanilla ice haircut', 'age': '27(thinks he is 19)', 'gender': 'male', 'start_item': 'skateboard', 'ability': '??', 'character_class': {'class_name': 'Monk', 'atk': 8, 'dfns': 2, 'dod': 7, 'hp': 7, 'intel': 3, 'fth': 2, 'stgh': 3, 'dex': 8, 'characters': [{...}]}, 'stat_perc': {'atk': 50, 'dfns': 50, 'dod': 50, 'hp': 40, 'intel': 50, 'fth': 10, 'stgh': 10, 'dex': 50}}, {'name': 'baldwin', 'desc': 'steals', 'age': '7', 'gender': 'female', 'start_item': 'your wallet', 'ability': '??', 'character_class': {'class_name': 'Rogue', 'atk': 6, 'dfns': 2, 'dod': 9, 'hp': 4, 'intel': 5, 'fth': 1, 'stgh': 5, 'dex': 8, 'characters': [{...}]}, 'stat_perc': {'atk': 80, 'dfns': 20, 'dod': 70, 'hp': 70, 'intel': 30, 'fth': 20, 'stgh': 30, 'dex': 80}}, {'name': 'steve', 'desc': 'geometric (hella based)', 'age': '12', 'gender': 'male', 'start_item': 'bare hands', 'ability': '??', 'character_class': {'class_name': 'Builder', 'atk': 9, 'dfns': 5, 'dod': 1, 'hp': 5, 'intel': 9, 'fth': 1, 'stgh': 9, 'dex': 1, 'characters': [{...}]}, 'stat_perc': {'atk': 60, 'dfns': 20, 'dod': 90, 'hp': 40, 'intel': 50, 'fth': 10, 'stgh': 50, 'dex': 80}}, {'name': 'barbie', 'desc': 'thiccc and 210 cm tall', 'age': '77', 'gender': 'male', 'start_item': 'doll with matching dress', 'ability': '??', 'character_class': {'class_name': 'Barb', 'atk': 9, 'dfns': 3, 'dod': 4, 'hp': 7, 'intel': 1, 'fth': 5, 'stgh': 6, 'dex': 5, 'characters': [{...}]}, 'stat_perc': {'atk': 90, 'dfns': 50, 'dod': 10, 'hp': 50, 'intel': 90, 'fth': 10, 'stgh': 90, 'dex': 10}}, {'name': 'herbert bernard', 'desc': 'canadian', 'age': 'redacted', 'gender': 'redacted', 'start_item': 'colt 1845', 'ability': '??', 'character_class': {'class_name': 'Cowboy_Alien', 'atk': 8, 'dfns': 3, 'dod': 5, 'hp': 4, 'intel': 8, 'fth': 1, 'stgh': 3, 'dex': 8, 'characters': [{...}]}, 'stat_perc': {'atk': 90, 'dfns': 30, 'dod': 40, 'hp': 70, 'intel': 10, 'fth': 50, 'stgh': 60, 'dex': 50}}, {'name': 'rock-umm', 'desc': '2 feet tall (buff)', 'age': '40', 'gender': 'male', 'start_item': 'rock', 'ability': '??', 'character_class': {'class_name': 'Paladin', 'atk': 5, 'dfns': 8, 'dod': 1, 'hp': 8, 'intel': 3, 'fth': 7, 'stgh': 7, 'dex': 1, 'characters': [{...}]}, 'stat_perc': {'atk': 80, 'dfns': 30, 'dod': 50, 'hp': 40, 'intel': 80, 'fth': 10, 'stgh': 30, 'dex': 80}}]
+
+flag = True
+exp_dictionary = char_list2[0]
+upper = 100
+lower = 0
+level = 1
+
+
+while flag == True:
+    
+    exp_amt = int(input())
+
+
+    exp_dictionary = char_list2[0]
+
+    lower += exp_amt
+
+    exp_dictionary[upper] = lower
+
+    if exp_dictionary.get(upper) >= upper:
+
+        while exp_dictionary.get(upper) >= upper:
+            level += 1
+            lower -= upper
+            exp_dictionary['level'] = level
+            exp_dictionary.pop(upper)
+            upper += round((upper * 0.7))
+            exp_dictionary.update({upper:lower})
+            stat_perc = dict(exp_dictionary.get('stat_perc'))
+            
+            for keys in stat_perc:
+                item = stat_perc.get(keys)
+                rand = random.randrange(0,101,1)
+                
+                if rand <= item:
+                    final = (exp_dictionary['character_class']).get(keys) + 1
+                    (exp_dictionary['character_class']).update({keys : final})
+                    
+
+    print(char_list2[0])
