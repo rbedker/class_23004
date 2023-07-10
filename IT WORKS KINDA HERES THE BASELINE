@@ -277,6 +277,14 @@ def gen_encounter_list(party, monster_list):
 
     return encounter_list
 
+def end_of_game_stats(party, downed_monsters):
+    """This function creates/appends to a file named 'end_of_game_stats.txt, printing out the party's character names and number of monsters defeated"""
+    with open("end_of_game_stats.txt", 'a') as f:
+        f.write("During Dungeon Crawl (TM) your party wandered through a dungeon, fighting their way through to get to the treasure. In your party there was")
+        for x in range(0,len(party)):
+            f.write(f", {party[x].get('name').title()}")
+        f.write(f". During the game, the party encountered {len(downed_monsters)} monsters. ")
+
 
 def main():
     class_list = []
@@ -336,5 +344,7 @@ def main():
 
         break
     
+    end_of_game_stats(party, downed_monsters)
+
 if __name__ == '__main__':
     main()
