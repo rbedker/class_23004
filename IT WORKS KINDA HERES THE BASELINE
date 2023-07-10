@@ -221,6 +221,7 @@ def pick_characters(classes, party):
     upper = 100
     lower = 0
     level = 1
+
     for x in party:
         x.update({'level': level})
         x.update({upper: lower})
@@ -364,7 +365,7 @@ def main():
     
     #Itterates through every index value (i) in each dictionary (player) in the party list
     for i, player in enumerate(party):
-        temp = int(player_health(party[i]) * 5)
+        temp = int(player_health(party[i]))
         player_hp.append(temp)
         
     for i in battle:
