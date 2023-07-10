@@ -255,23 +255,24 @@ def gen_encounter_list(party, monster_list):
     level = 0
     encounter_diff = 0
 
-    for x in range(len(party)):
-        lvl = party[x].get('level')
-        level += lvl / 4
+    for char in party:
+        level += char.get('level') / 4
     
-    for monster in range(len(monster_list)):
-        monsters = monster_list[monster]
-        monster_diff = monster_list[monster].get('diff')
+    for monster in monster_list:
+        monster_diff = monster.get('diff')
         
         if monster_diff <= level:
             poss_encounter.append(monsters)
+
     while encounter_diff < level:
         for monsters in poss_encounter:
             random.shuffle(poss_encounter)
             diff = monsters.get('diff')
+
             if encounter_diff < level and encounter_diff + diff < level * 1.5:
                     encounter_diff += diff
                     encounter_list.append(monsters)
+
             else:
                 continue
 
@@ -280,9 +281,9 @@ def gen_encounter_list(party, monster_list):
 def end_of_game_stats(party, downed_monsters):
     """This function creates/appends to a file named 'end_of_game_stats.txt, printing out the party's character names and number of monsters defeated"""
     with open("end_of_game_stats.txt", 'a') as f:
-        f.write("During Dungeon Crawl (TM) your party wandered through a dungeon, fighting their way through to get to the treasure. In your party there was")
-        for x in range(0,len(party)):
-            f.write(f", {party[x].get('name').title()}")
+        f.write("During Dungeon Crawl (TM) your party wandered through a dungeon, fighting their way through to get to the treasure. In your party there was:")
+        for char in party:
+            f.write(f", {char.get('name').title()}")
         f.write(f". During the game, the party encountered {len(downed_monsters)} monsters. ")
 
 
