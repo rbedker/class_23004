@@ -121,12 +121,16 @@ def pick_characters(classes, party):
                     else:
                         print('Not a valid character name!')
                         continue
-                    
+    upper = 100
+    lower = 0
+    level = 1
     
     
     for x in party:
-        x.update({'level': 1})
-        # x.update({upper: lower})
+        current_hp = ((x['character_class']).get('hp')) * 5
+        x.update({'level': level})
+        x.update({upper: lower})
+        x.update({'current_hp' : current_hp})
     
     print(f'Your party is {party[0]["name"].title()}, '
           f'{party[1]["name"].title()}, {party[2]["name"].title()}, '
@@ -150,32 +154,40 @@ def print_char(char):
     print(f"Starter item: {char['start_item'].title()}")
     print(f"Ability: {char['ability'].title()}")
 
-def generating_encounter_list(party, monster_list):
+def gen_encounter_list(party, monster_list):
     """ This function generates a list of monsters for the characters to fight """
     poss_encounter = []
     encounter_list = []
     level = 0
     encounter_diff = 0
-    for x in range(0,len(party)):
+
+    for x in range(len(party)):
         lvl = party[x].get('level')
-        level += lvl/4
+        level += lvl / 4
     
-    for monster in range(0,len(monster_list)):
+    for monster in range(len(monster_list)):
         monsters = monster_list[monster]
-        monster_diff = float(monster_list[monster].get('diff'))
+        monster_diff = monster_list[monster].get('diff')
         
-        if monster_diff < level:
+        if float(monster_diff) <= level:
             poss_encounter.append(monsters)
-    
-    while True:
+    while encounter_diff < level:
         for monsters in poss_encounter:
             r.shuffle(poss_encounter)
             diff = float(monsters.get('diff'))
-            if encounter_diff < level:
-                    encounter_diff += diff
+            if encounter_diff < level and encounter_diff + diff < level * 1.5:
+                
+                if monsters not in encounter_list:
                     encounter_list.append(monsters)
-        break
-    return(encounter_list)
+                    encounter_diff += diff
+                        
+                for hp_val in encounter_list:
+                    hp_val['hp'] = hp_val['hp'] * 5
+            else:
+                continue
+
+    return encounter_list
+
 
 
 
@@ -188,6 +200,9 @@ def monster_attack(char):
 def player_defence(char):
     return char['character_class']['dfns']
 
+def player_name(char):
+    return char['name']
+
 def monster_defence(char):
     return char['dfns']
 
@@ -195,7 +210,7 @@ def monster_name(char):
     return char['monster_name']
 
 def player_health(char):
-    return char['character_class']['hp']
+    return char.get('current_hp')
 
 def monster_health(char):
     return char['hp']
@@ -231,7 +246,7 @@ def main():
     #peudo battle code
     
     #Creates a list of monsters encountered in this fight
-    battle = generating_encounter_list(party, monster_list)
+    battle = gen_encounter_list(party, monster_list)
     
     #Itterates through every index value (i) in each dictionary (monster) in the battle list
     for i, monster in enumerate(battle):
@@ -249,39 +264,65 @@ def main():
     #while encounter still ongoiong, loop will continue
     while True:
         for character in party:
-            user = input('Press 1 for attack \n Press 2 for item')
+            user = input(f'What shall {player_name(character)} do? \n Press 1 for attack \n Press 2 for item')
             if user == '1':
-                while True:
+                #while True:
                 
-                    for i in battle:
-                        counter += 1
-                        print(f'{counter}: {monster_name(i)}')
-                    counter = 0
+                for i in battle:
+                    counter += 1
+                    print(f'{counter}: {monster_name(i)}')
+                counter = 0
 
-                    new_user = int(input('Select which monster you would like to attack:')) - 1
-                    try:
-                        battle.index(new_user)
-                        print("It worked")
+                new_user = int(input('Select which monster you would like to attack:')) - 1
+                try:
+                        
+                    
+                    #Calculates how much damage was dealt and the monsters new health
+                    mons_dfns_value = monster_defence(battle[new_user])
+                    monster_hp = monster_health(battle[new_user])
+                    #need to implement strongest stat modifier to damage done
+                    plyr_atk_value = .5 * player_attack(character) + .25
+                    dmg = plyr_atk_value - mons_dfns_value
+                    monster_hp -= int(dmg)
+                        
+                    #Sets the monsters health to the approprite value
+                    print(battle[new_user]['hp'])
+                    battle[new_user]['hp']=monster_hp
+                    print(battle[new_user]['hp'])
+                        
+                    #If the monster is knocked out, it is added to a new list
+                    if battle[new_user]['hp'] <= 0:
+                        print(f'{monster_name(battle[new_user])} has been defeated!')
+                        downed_monsters.append(battle.pop(new_user))
+                        
                     
                         
-#                         mons_dfns_value = monster_defence(battle[user])
-#                         monster_hp = monster_health(battle[user])
-#                         #need to implement strongest stat modifier to damage done
-#                         plyr_atk_value = .5 * player_attack(character) + .25
-#                         dmg = plyr_atk_value - mons_dfns_value
-#                         monster_hp -= int(dmg)
+                        
                     
-                    except:
-                        print('Enter a valid number')
-                        continue
+                except:
+                    print('Enter a valid number')
+                    continue
             
             elif user == '2':
                 pass
             else:
                 print('Please select 1 or 2.')
                 continue
+                
+                
+            if len(battle) == 0:
+                print("The battle is won")
+                break
+                
+        if len(battle) == 0:
+            break
         
+        
+        #Monster attack
         for monster in battle:
+            plyr_dfns_value = player_defence(battle[new_user])
+            player_hp = player_health(battle[new_user])
+            
             mon_atk_value = .5 * monster_attack + .25
             dmg = mon_atk_value - plyr_dfns_value
             player_hp -= int(dmg)
