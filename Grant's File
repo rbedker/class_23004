@@ -1,0 +1,292 @@
+import random as r
+from functions import *
+
+
+def import_class(class_list):
+    '''imports classes from char_stats.txt'''
+    line_list = []
+    list_type = ["class_name", "atk",
+                 "dfns", "dod", "hp",
+                 "intel", "fth", "stgh", "dex"
+                ]
+
+    with open("char_stats.txt", 'r') as f:
+        for line in f:
+            line = line.replace("\n", "")
+            line = line.split()
+            for item in line:
+                if item.isdigit() == True:
+                    line[line.index(item)] = int(item)
+            line_list.append(line)
+
+    for characters in line_list:
+        dict_char = dict(zip(list_type, characters))
+        class_list.insert(-1, dict_char)
+
+
+def import_chars(char_list, class_list):
+    line_list = []
+    list_type = ['name', 'desc',
+                 'age', 'gender',
+                 'start_item', 'ability', 'class'
+                ]
+
+    with open('characters.txt', 'r') as f:
+        for line in f:
+            line = line.strip().split(',')
+            line_list.append(line)
+        
+    for char in line_list:
+        dict_char = dict(zip(list_type, char))
+        char_list.insert(-1, dict_char)
+    
+    for char in char_list:
+        for c in class_list:
+            if char['class'] == c['class_name']:
+                char.update({'character_class': c})
+    
+    for char in char_list:
+        del char['class']
+
+    for x in class_list:
+        x.update({'characters': []})
+        for y in char_list:
+            if y['character_class']['class_name'] == x['class_name']:
+                x['characters'].append(y)
+            
+
+def import_monsters(monster_list):
+    '''imports classes from char_stats.txt'''
+    line_list = []
+
+    list_type = ["monster_name", "atk",
+                 "dfns", "dod", "hp",
+                 "intel", "fth", "stgh", "dex", "diff", "xp"
+                ]
+
+    with open("monster_stats.txt", 'r') as f:
+        for line in f:
+            line = line.replace("\n", "")
+            line = line.replace(",", " ")
+            line = line.split()
+            for item in line:
+                if item.isdigit() == True or item.isdecimal() == True:
+                    line[line.index(item)] = float(item)
+            line_list.append(line)
+
+    for characters in line_list:
+        dict_char = dict(zip(list_type, characters))
+        monster_list.insert(-1, dict_char)
+
+
+def return_char(name, party):
+    '''loops through party to find appropriate char dict'''
+    for x in party:
+        if x['name'] == name.lower():
+            return x
+    else:
+        raise ValueError('Char doesn\'t exist!')
+        
+        
+def return_char_stats(name, char_list):
+    '''loops through char list to find appropriate char dict and find stats of dict'''
+    for x in char_list:
+        if x['name'] == name.lower():
+            return x['class_stats']
+
+        
+def return_char_stat_perc(name, char_list):
+    '''loops through char list to find appropriate char dict and find stats perc of dict'''
+    for x in char_list:
+        if x['name'] == name.lower():
+            return x['stat_perc']
+
+        
+def pick_characters(classes, party):
+    '''picks party at start'''
+    while len(classes) > 4:
+        classes.remove(r.choice(classes))
+    
+    while len(party) < 4:
+        for dictionary in classes:
+            print(f'Class is {dictionary["class_name"]}\n')
+            for char in dictionary["characters"]:
+                while True:
+                    print_char(char)
+                    select = input('Type character name to add character to party: ')
+                    if select.lower() == char['name']:
+                        party.append(char)
+                        print(f'{select.title()} has been added to the party!\n')
+                        break
+                    else:
+                        print('Not a valid character name!')
+                        continue
+                    
+    
+    
+    for x in party:
+        x.update({'level': 1})
+        # x.update({upper: lower})
+    
+    print(f'Your party is {party[0]["name"].title()}, '
+          f'{party[1]["name"].title()}, {party[2]["name"].title()}, '
+          f'and {party[3]["name"].title()}'
+         )
+    
+    char_1 = party[0]
+    char_2 = party[1]
+    char_3 = party[2]
+    char_4 = party[3]
+    
+    return char_1, char_2, char_3, char_4
+
+
+def print_char(char):
+    print(f"Name: {char['name'].title()}")
+    print(f"Class: {char['character_class']['class_name'].title()}")
+    print(f"Description: {char['desc'].title()}")
+    print(f"Age: {char['age'].title()}")
+    print(f"Gender: {char['gender'].title()}")
+    print(f"Starter item: {char['start_item'].title()}")
+    print(f"Ability: {char['ability'].title()}")
+
+def generating_encounter_list(party, monster_list):
+    """ This function generates a list of monsters for the characters to fight """
+    poss_encounter = []
+    encounter_list = []
+    level = 0
+    encounter_diff = 0
+    for x in range(0,len(party)):
+        lvl = party[x].get('level')
+        level += lvl/4
+    
+    for monster in range(0,len(monster_list)):
+        monsters = monster_list[monster]
+        monster_diff = float(monster_list[monster].get('diff'))
+        
+        if monster_diff < level:
+            poss_encounter.append(monsters)
+    
+    while True:
+        for monsters in poss_encounter:
+            r.shuffle(poss_encounter)
+            diff = float(monsters.get('diff'))
+            if encounter_diff < level:
+                    encounter_diff += diff
+                    encounter_list.append(monsters)
+        break
+    return(encounter_list)
+
+
+
+def player_attack(char):
+    return char['character_class']['atk']
+
+def monster_attack(char):
+    return char['atk']
+
+def player_defence(char):
+    return char['character_class']['dfns']
+
+def monster_defence(char):
+    return char['dfns']
+
+def monster_name(char):
+    return char['monster_name']
+
+def player_health(char):
+    return char['character_class']['hp']
+
+def monster_health(char):
+    return char['hp']
+
+def main():
+    class_list = []
+    char_list = []
+    monster_list = []
+    battle = []
+    party = []
+    player_hp = []
+    monster_hp = []
+    downed_players = []
+    downed_monsters = []
+    upper = 100
+    lower = 0
+    plyr_atk_value = 0
+    plyr_dfns_value = 0
+    mons_atk_value = 0
+    mon_dfns_value = 0
+    dmg = 0
+    temp = 0
+    counter = 0
+    
+    import_class(class_list)
+    import_monsters(monster_list)
+    import_chars(char_list, class_list)
+
+    char_1, char_2, char_3, char_4 = pick_characters(class_list, party)
+    
+    print('Welcome, heroes! Prepare to die?')
+    
+    #peudo battle code
+    
+    #Creates a list of monsters encountered in this fight
+    battle = generating_encounter_list(party, monster_list)
+    
+    #Itterates through every index value (i) in each dictionary (monster) in the battle list
+    for i, monster in enumerate(battle):
+        temp = int(monster_health(battle[i]) * 5)
+        monster_hp.append(temp)
+    
+    #Itterates through every index value (i) in each dictionary (player) in the party list
+    for i, player in enumerate(party):
+        temp = int(player_health(party[i]) * 5)
+        player_hp.append(temp)
+        
+    for i in battle:
+         print(monster_name(i))
+        
+    #while encounter still ongoiong, loop will continue
+    while True:
+        for character in party:
+            user = input('Press 1 for attack \n Press 2 for item')
+            if user == '1':
+                while True:
+                
+                    for i in battle:
+                        counter += 1
+                        print(f'{counter}: {monster_name(i)}')
+                    counter = 0
+
+                    new_user = int(input('Select which monster you would like to attack:')) - 1
+                    try:
+                        battle.index(new_user)
+                        print("It worked")
+                    
+                        
+#                         mons_dfns_value = monster_defence(battle[user])
+#                         monster_hp = monster_health(battle[user])
+#                         #need to implement strongest stat modifier to damage done
+#                         plyr_atk_value = .5 * player_attack(character) + .25
+#                         dmg = plyr_atk_value - mons_dfns_value
+#                         monster_hp -= int(dmg)
+                    
+                    except:
+                        print('Enter a valid number')
+                        continue
+            
+            elif user == '2':
+                pass
+            else:
+                print('Please select 1 or 2.')
+                continue
+        
+        for monster in battle:
+            mon_atk_value = .5 * monster_attack + .25
+            dmg = mon_atk_value - plyr_dfns_value
+            player_hp -= int(dmg)
+
+
+
+if __name__ == '__main__':
+    main()
