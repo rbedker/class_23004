@@ -110,6 +110,34 @@ def import_items(item_list):
 #     else:
 #         raise ValueError('Char doesn\'t exist!')
 
+def exp_gain(player_dict, exp_amt):
+    '''adds exp to given character'''
+
+    exp_dictionary = party_dict
+
+    lower += exp_amt
+
+    exp_dictionary[upper] = lower
+
+    while exp_dictionary.get(upper) >= upper:
+        level += 1
+        lower -= upper
+        exp_dictionary['level'] = level
+        exp_dictionary.pop(upper)
+        upper += round((upper * 0.7))
+        exp_dictionary.update({upper:lower})
+        stat_perc = return_char_stat_perc(name)
+
+        for keys in stat_perc:
+            item = stat_perc.get(keys)
+            rand = random.randrange(0,101,1)
+
+            if rand <= item:
+                final = (exp_dictionary['character_class']).get(keys) + 1
+                (exp_dictionary['character_class']).update({keys : final})
+                
+    exp_dictionary['current_hp'] = (exp_dictionary['character_class']).get('hp') * 5
+
 
 def drop_items(encounter, item_list):
     '''generates item drops from encounters'''
