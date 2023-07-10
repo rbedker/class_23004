@@ -262,7 +262,7 @@ def gen_encounter_list(party, monster_list):
         monster_diff = monster.get('diff')
         
         if monster_diff <= level:
-            poss_encounter.append(monsters)
+            poss_encounter.append(monster)
 
     while encounter_diff < level:
         for monsters in poss_encounter:
