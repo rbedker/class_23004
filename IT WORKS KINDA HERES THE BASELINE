@@ -198,12 +198,6 @@ def return_char_stat_perc(name, char_list):
         if x['name'] == name.lower():
             return x['stat_perc']
 
-
-def pick_characters(classes, party):
-    '''picks party at start'''
-    while len(classes) > 4:
-        classes.remove(r.choice(classes))
-
 def exp_gain(player_dict, exp_amt):
     '''adds exp to given character'''
 
@@ -231,6 +225,12 @@ def exp_gain(player_dict, exp_amt):
                 (exp_dictionary['character_class']).update({keys : final})
                 
     exp_dictionary['current_hp'] = (exp_dictionary['character_class']).get('hp') * 5
+
+
+def pick_characters(classes, party):
+    '''picks party at start'''
+    while len(classes) > 4:
+        classes.remove(r.choice(classes))
 
     while len(party) < 4:
         for dictionary in classes:
